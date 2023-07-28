@@ -4,6 +4,7 @@ An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets i
 | Authors | Chunchao Wang      |
 | ------- | ------------------ |
 | Email   | admy55@gmail.com   |
+
 ![](pipeline.jpg)
 
 <br>
