@@ -1,1 +1,1 @@
-# coreSNP Selector from VCF file
+# Select coreSNP from VCF file
