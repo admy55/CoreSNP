@@ -5,6 +5,10 @@ An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets i
 | ------- | ------------------ |
 | Email   | admy55@gmail.com   |
 
+## Python version >= 3.6
+## Required: Numpy
+## System platform: Linux, Windows, MacOS
+
 ![](pipeline.tiff)
 
 <br>
