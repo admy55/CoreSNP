@@ -5,6 +5,6 @@ An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets i
 | ------- | ------------------ |
 | Email   | admy55@gmail.com   |
 
-![](pipeline.jpg)
+![](pipeline.tiff)
 
 <br>
