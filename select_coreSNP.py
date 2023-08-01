@@ -221,6 +221,8 @@ def vcf2bed(file):
         plink,
         '--vcf',
         file,
+        '--geno',
+        '0.2',
         '--double-id',
         '--allow-extra-chr',
         '--freq',
