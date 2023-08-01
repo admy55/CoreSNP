@@ -16,7 +16,7 @@ import numpy as np
 
 def check_plink():
     try:
-        subprocess.run(['plink', '--version'], stdout=subprocess.PIPE)
+        subprocess.run(('plink', '--version'), stdout=subprocess.PIPE)
         plink_path = 'plink'
     except OSError:
         logger.error('Cannot find plink in your PATH.')
@@ -24,10 +24,10 @@ def check_plink():
             logger.error('Alternatively, put plink in the same directory with this script.')
             sys.exit()
 
-        subprocess.run(['chmod', 'u+x', 'plink'], capture_output=True)
+        os.chmod('plink', 0o755)
         plink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'plink')
         try:
-            subprocess.run([plink_path, '--version'], stdout=subprocess.PIPE)
+            subprocess.run((plink_path, '--version'), stdout=subprocess.PIPE)
             logger.info(f'Using "{plink_path}" instead.')
         except OSError:
             logger.error('Please make sure plink has executable permission or is complete.')
@@ -273,7 +273,7 @@ def record_positions(pattern, text):
         # logger.debug(f'Non missing exists.')
         pass
     else:
-        positions = set(x.start() for x in itertools.chain([first_match], matches))
+        positions = set(x.start() for x in itertools.chain((first_match,), matches))
 
     return positions
 
@@ -746,7 +746,6 @@ def replace_missing(prefix):
                 break
 
             # Update temp_sets, remove index set that contains selected SNP
-            # temp_sets = (s for s in temp_sets if snp_id_to_index[selected_snp] not in s)
             temp_sets = tuple(s for s in temp_sets if snp_id_to_index[selected_snp] not in s)
 
     if args.minimal == 2:
@@ -774,7 +773,6 @@ def replace_missing(prefix):
             if counter == max_group:
                 break
 
-            # diff_sets = (s for s in diff_sets if snp_id_to_index[selected_snp] not in s)
             diff_sets = tuple(s for s in diff_sets if snp_id_to_index[selected_snp] not in s)
 
     return (sample_pairs, final_core)
