@@ -16,6 +16,16 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
     select_coreSNP.py –-vcf <data.vcf>
 
 
+### Parameters:
+* '-v'/'--vcf' <str> Input VCF Format 
+* '-i'/'--include' <str> A file contained SNPs that must be included in the core set
+* '-e'/'--exclude' <str> A file contained SNPs that would never be included in the core set'
+* '-x'/'--flexing' <str> The minimal number of candidate SNPs at each round, default=1, choices=range (1, 6)
+* '-m'/'--minimal' <int> The minimal number of differential SNPs for each pairwise samples, default=1, choices=range (1, 3)
+* '-c'/'--count' <int> The number of core sets this program generates, default=1, choices=range (1, 11)
+* '-o'/'--out' <str> Output final results
+* '-l'/'--log' <str> Output log file
+* '-M'/'--more-info' <str> Print more info to log when running 
 
 
 
