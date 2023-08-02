@@ -33,7 +33,8 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
     -M/--more-info  <str>    Print more info to log when running.
 
 
-
-![](images/pipeline.png)
-
 <br>
+![](images/pipeline.png)
+<br>
+
+## Publication
