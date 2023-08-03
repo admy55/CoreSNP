@@ -3,7 +3,6 @@
 # modified on 2023-07-21
 import os
 import re
-import sys
 import gzip
 import random
 import logging
@@ -22,7 +21,7 @@ def check_plink():
         logger.error('Cannot find plink in your PATH.')
         if not os.path.exists('plink'):
             logger.error('Alternatively, put plink in the same directory with this script.')
-            sys.exit()
+            raise SystemExit
 
         os.chmod('plink', 0o755)
         plink_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'plink')
@@ -31,6 +30,7 @@ def check_plink():
             logger.info(f'Using "{plink_path}" instead.')
         except OSError:
             logger.error('Please make sure plink has executable permission or is complete.')
+            raise SystemExit
 
     return plink_path
 
