@@ -1,8 +1,8 @@
-# Minimal coreSNP Selection
+# Minimal CoreSNP Selection
 An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets in Crops
 <br>
 
-We introduce the coreSNP pipeline, providing Shannon indices to evaluate the discrimination power of maker combinations, with the aim to select a minimal set of core SNPs essential for discrimination of large-scale sequenced samples. 
+We introduce the CoreSNP pipeline, providing Shannon indices to evaluate the discrimination power of maker combinations, with the aim to select a minimal set of core SNPs essential for discrimination of large-scale sequenced samples. 
 CoreSNP is designed to use the compressed or uncompressed Variant Call Format (VCF) file as input to produce the core SNP sets results.
 
 ## Dependences
@@ -33,9 +33,9 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
     -M/--more-info  <str>    Print more info to log when running.
 
 
-## CoreSNP pipeline
+## CoreSNP flowchart
 
-![](images/pipeline.png)
+![](images/flowchart.png)
 
 <br>
 
