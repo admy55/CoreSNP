@@ -1,5 +1,5 @@
-# Minimal CoreSNP Selection
-An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets in Crops
+# Minimal Core SNPs Selection
+#### An Efficient Pipeline for Selecting Core Markers from Genome-wide SNP Datasets
 <br>
 
 We introduce the CoreSNP pipeline, providing Shannon indices to evaluate the discrimination power of maker combinations, with the aim to select a minimal set of core SNPs essential for discrimination of large-scale sequenced samples. 
@@ -32,8 +32,7 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
                              (default: coreSNP.log)
     -M/--more-info  <str>    Print more info to log when running.
 
-
-## CoreSNP flowchart
+<br>
 
 ![](images/flowchart.png)
 
