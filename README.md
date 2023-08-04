@@ -33,7 +33,7 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
 
 <br>
 
-![](./images/flowchart.png)
+![](images/flowchart.png)
 
 <br>
 
