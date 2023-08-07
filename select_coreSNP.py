@@ -78,6 +78,13 @@ def get_args():
         help='the number of core sets this program generates (default: %(default)s)',
     )
     parser.add_argument(
+        '-g',
+        '--missing',
+        type=float,
+        default=0.2,
+        help='the threshold of missing call frequency to filter variants (default: %(default)s)',
+    )
+    parser.add_argument(
         '-o',
         '--out',
         default='result',
