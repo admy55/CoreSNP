@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Chunchao Wang <admy55@gmail.com> & Tingyu Dou <tydou622@gmail.com>
 # modified on 2023-07-21
-import os
-import re
-import gzip
-import random
-import logging
 import argparse
+import gzip
 import itertools
+import logging
+import os
+import random
+import re
 import subprocess
 from collections import namedtuple, Counter, deque
 import numpy as np
