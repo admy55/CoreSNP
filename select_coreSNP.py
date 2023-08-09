@@ -171,7 +171,7 @@ class FilePrefix:
 
 RePattern = namedtuple(
     'pattern',
-    [
+    (
         'ref',
         'alt',
         'missing_hetero',
@@ -181,7 +181,7 @@ RePattern = namedtuple(
         'vcf_title',
         'space',
         'cap_double_w',
-    ],
+    ),
 )
 re_pattern = RePattern(
     ref=re.compile('0/0'),
@@ -229,13 +229,15 @@ def vcf2bed(file):
         '--vcf',
         file,
         '--geno',
-        '0.2',
+        str(args.missing),
         '--double-id',
         '--allow-extra-chr',
         '--freq',
         '--missing',
         '--ibs-matrix',
         '--make-bed',
+        '--recode',
+        'vcf-iid',
         '--out',
         f'{args.out}/data',
     )
@@ -282,7 +284,7 @@ def record_positions(pattern, text):
         # logger.debug(f'Non missing exists.')
         pass
     else:
-        positions = set(x.start() for x in itertools.chain((first_match,), matches))
+        positions = set(x.start() for x in itertools.chain((first_match, ), matches))
 
     return positions
 
@@ -695,12 +697,12 @@ def replace_missing(prefix):
         try:
             next(itertools.chain.from_iterable(diff_sets_1))
         except StopIteration:
-            return final_core
+            return (sample_pairs, final_core)
     elif args.minimal == 2:
         try:
             next(itertools.chain.from_iterable((*diff_sets_1, *diff_sets_2)))
         except StopIteration:
-            return final_core
+            return (sample_pairs, final_core)
 
     # Fill missing by adding more SNPs.
     snp_index_to_id = {}
@@ -910,7 +912,7 @@ if __name__ == '__main__':
     logger.info('Initializing.')
     vcf2bed(args.vcf)
     logger.info('Convert heterozygous SNP to missing, and impute by major allele.')
-    (samples, genotype) = fill_by_major(args.vcf)
+    (samples, genotype) = fill_by_major(f'{args.out}/data.vcf')
 
     for i in range(args.count):
         prefix = FilePrefix(f'core_{i+1}')
@@ -918,8 +920,7 @@ if __name__ == '__main__':
         remove_files(prefix)
 
 # TODO
-# 1. Filter raw vcf by missing rate with 0.2 before 'fill by major'.
-#    If there still exists samples that share the same haplotype, use SNPs in the raw vcf.
+# 1. Because of missing filtration, if there still exists samples that share the same haplotype, use SNPs in the raw vcf.
 # 2. In the 'core selection' step, remove the sample in next iteration if it is unique for one haplotype.
 # 3. Adding a new module that selecting core SNP using 'diff sets' method.
 # 4. Generate some graphs such as IBS/MAF/missing distribution, visualization of selecting, SNP on chromosome etc.
