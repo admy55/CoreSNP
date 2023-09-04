@@ -238,6 +238,7 @@ def vcf2bed(file):
         '--make-bed',
         '--recode',
         'vcf-iid',
+        'bgz',
         '--out',
         f'{args.out}/data',
     )
@@ -912,7 +913,7 @@ if __name__ == '__main__':
     logger.info('Initializing.')
     vcf2bed(args.vcf)
     logger.info('Convert heterozygous SNP to missing, and impute by major allele.')
-    (samples, genotype) = fill_by_major(f'{args.out}/data.vcf')
+    (samples, genotype) = fill_by_major(f'{args.out}/data.vcf.gz')
 
     for i in range(args.count):
         prefix = FilePrefix(f'core_{i+1}')
