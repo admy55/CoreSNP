@@ -12,7 +12,7 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
 
 
 ## Usage
-    select_coreSNP.py –-vcf data.vcf
+    python3 CoreSNP.py –-vcf data.vcf
 
 
 #### Parameters:
