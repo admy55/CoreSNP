@@ -234,26 +234,47 @@ def vcf2bed(file):
         file: a .vcf or .vcf.gz file
     """
 
-    script = (
-        plink,
-        '--vcf',
-        file,
-        '--double-id',
-        '--allow-extra-chr',
-        '--geno',
-        str(args.missing),
-        '--maf',
-        str(args.maf),
-        '--freq',
-        '--missing',
-        '--ibs-matrix',
-        '--make-bed',
-        '--recode',
-        'vcf-iid',
-        'bgz',
-        '--out',
-        f'{args.out}/data',
-    )
+
+    if args.maf == 0:
+        script = (
+            plink,
+            '--vcf',
+            file,
+            '--double-id',
+            '--allow-extra-chr',
+            '--geno',
+            str(args.missing),
+            '--maf',
+            str(args.maf),
+            '--freq',
+            '--missing',
+            '--ibs-matrix',
+            '--make-bed',
+            '--recode',
+            'vcf-iid',
+            'bgz',
+            '--out',
+            f'{args.out}/data',
+        )
+    else:
+        script = (
+            plink,
+            '--vcf',
+            file,
+            '--double-id',
+            '--allow-extra-chr',
+            '--geno',
+            str(args.missing),
+            '--freq',
+            '--missing',
+            '--ibs-matrix',
+            '--make-bed',
+            '--recode',
+            'vcf-iid',
+            'bgz',
+            '--out',
+            f'{args.out}/data',
+        )
     subprocess.run(script, stdout=subprocess.PIPE)
 
 
