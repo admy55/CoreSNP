@@ -83,7 +83,7 @@ def get_args():
         type=float,
         default=0.2,
         #choices=range(0.0, 0.5),
-        help='the variants with missing call rate larger than the threshold will be filtered (default: %(default)s)',
+        help='The threshold of missing call frequency, filter variants with a larger value (default: %(default)s)',
     )
     parser.add_argument(
         '-f',
@@ -92,7 +92,7 @@ def get_args():
         default=0.0,
         #choices=range(0.0, 0.5),
         help=
-        'the variants with minor allele frequency smaller than the threshold will be filtered (default: %(default)s)',
+        'The threshold of minor allele frequency, filter variants with a smaller value (default: %(default)s)',
     )
     parser.add_argument(
         '-o',
