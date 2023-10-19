@@ -25,8 +25,10 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
                              (default: 1, range: 1~2)
     -c/--count      <int>    The number of core sets this program generates.
                              (default: 1, range: 1~10)
-    -g/--missing    <float>  The threshold of missing call frequency to filter variants.
-                             (default: 0.2, range: 0~0.5)    
+    -g/--missing    <float>  The threshold of missing call frequency, filter variants with a larger value.
+                             (default: 0.2, range: 0~0.5)
+    -f/--maf        <float>  The threshold of minor allele frequency, filter variants with a smaller value.
+                             (default: 0.2, range: 0~0.5)
     -o/--out        <str>    Directory name of output results.
                              (default: result)
     -l/--log        <str>    Filename of log file.
