@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Chunchao Wang <admy55@gmail.com> & Tingyu Dou <tydou622@gmail.com>
-# modified on 2023-07-21
+# modified on 2023-08-01
 import argparse
 import gzip
 import itertools
@@ -82,7 +82,17 @@ def get_args():
         '--missing',
         type=float,
         default=0.2,
-        help='the threshold of missing call frequency to filter variants (default: %(default)s)',
+        #choices=range(0.0, 0.5),
+        help='the variants with missing call rate larger than the threshold will be filtered (default: %(default)s)',
+    )
+    parser.add_argument(
+        '-f',
+        '--maf',
+        type=float,
+        default=0.0,
+        #choices=range(0.0, 0.5),
+        help=
+        'the variants with minor allele frequency smaller than the threshold will be filtered (default: %(default)s)',
     )
     parser.add_argument(
         '-o',
@@ -228,10 +238,12 @@ def vcf2bed(file):
         plink,
         '--vcf',
         file,
-        '--geno',
-        str(args.missing),
         '--double-id',
         '--allow-extra-chr',
+        '--geno',
+        str(args.missing),
+        '--maf',
+        str(args.maf),
         '--freq',
         '--missing',
         '--ibs-matrix',
@@ -694,12 +706,26 @@ def replace_missing(prefix):
         final_core = [i.strip() for i in f.readlines()]
 
     # If there is no more SNPs that could distinguish the sample pairs, return s1.snp as core SNP.
-    if args.minimal == 1:
-        try:
-            next(itertools.chain.from_iterable(diff_sets_1))
-        except StopIteration:
+    # if args.minimal == 1:
+    #     try:
+    #         next(itertools.chain.from_iterable(diff_sets_1))
+    #     except StopIteration:
+    #         return (sample_pairs, final_core)
+    # elif args.minimal == 2:
+    #     try:
+    #         next(itertools.chain.from_iterable((*diff_sets_1, *diff_sets_2)))
+    #     except StopIteration:
+    #         return (sample_pairs, final_core)
+    flag = 1
+    try:
+        next(itertools.chain.from_iterable(diff_sets_1))
+    except StopIteration:
+        if args.minimal == 1:
             return (sample_pairs, final_core)
-    elif args.minimal == 2:
+        elif args.minimal == 2:
+            flag = 0
+
+    if args.minimal == 2:
         try:
             next(itertools.chain.from_iterable((*diff_sets_1, *diff_sets_2)))
         except StopIteration:
@@ -718,47 +744,48 @@ def replace_missing(prefix):
             snp_maf[snp_id] = float(maf)
 
     # Check if there is a perfect intersection set, if True then just return it.
-    perfect_set = diff_sets_1[0].copy()
-    for set_ in diff_sets_1:
-        perfect_set.intersection_update(set_)
-
     num = len(final_core)
-    selected = set()
-    if perfect_set:
-        # Fortunately, we got the perfect SNPs!
-        logger.debug(f'Candidate SNP index: {perfect_set}')
-        diff_snp = [snp_index_to_id[i] for i in perfect_set]
-        selected_snp = max(diff_snp, key=snp_maf.get)
-        final_core.append(selected_snp)
-        num += 1
-        logger.info(f'Selecting SNP #{num}: {selected_snp}')
-    else:
-        # Sadly, there is not a prefect intersection set, pick the SNPs which has the max frequency
-        max_group = len(diff_sets_1)
-        logger.debug(f'Number of sample pairs should be distinguished: {max_group}')
+    if args.minimal == 1 or flag == 1:
+        perfect_set = diff_sets_1[0].copy()
+        for set_ in diff_sets_1:
+            perfect_set.intersection_update(set_)
 
-        temp_sets = diff_sets_1.copy()
-        counter = 0
-        while counter < max_group:
-            frequency = Counter(itertools.chain.from_iterable(temp_sets))
-            mx = max(Counter(frequency.values()))
-            logger.debug(f'Top count of SNP in diff sets: {mx}')
-            candidate = [k for k, v in frequency.items() if v == mx]
-            logger.debug(f'Candidate SNP index: {candidate}')
-            diff_snp = [snp_index_to_id[i] for i in candidate]
+        if perfect_set:
+            # Fortunately, we got the perfect SNPs!
+            logger.debug(f'Candidate SNP index: {perfect_set}')
+            diff_snp = [snp_index_to_id[i] for i in perfect_set]
             selected_snp = max(diff_snp, key=snp_maf.get)
             final_core.append(selected_snp)
             num += 1
             logger.info(f'Selecting SNP #{num}: {selected_snp}')
-            selected.add(snp_id_to_index[selected_snp])
+        # else:
+        # Sadly, there is not a prefect intersection set, pick the SNPs which has the max frequency
+    max_group = len(diff_sets_1)
+    logger.debug(f'Number of sample pairs should be distinguished: {max_group}')
 
-            counter += mx
-            logger.debug(f'Number of sample pairs have been distinguished: {counter} of {max_group}')
-            if counter == max_group:
-                break
+    selected = set()
+    temp_sets = diff_sets_1.copy()
+    counter = 0
+    while counter < max_group:
+        frequency = Counter(itertools.chain.from_iterable(temp_sets))
+        mx = max(Counter(frequency.values()))
+        logger.debug(f'Top count of SNP in diff sets: {mx}')
+        candidate = [k for k, v in frequency.items() if v == mx]
+        logger.debug(f'Candidate SNP index: {candidate}')
+        diff_snp = [snp_index_to_id[i] for i in candidate]
+        selected_snp = max(diff_snp, key=snp_maf.get)
+        final_core.append(selected_snp)
+        num += 1
+        logger.info(f'Selecting SNP #{num}: {selected_snp}')
+        selected.add(snp_id_to_index[selected_snp])
 
-            # Update temp_sets, remove index set that contains selected SNP
-            temp_sets = tuple(s for s in temp_sets if snp_id_to_index[selected_snp] not in s)
+        counter += mx
+        logger.debug(f'Number of sample pairs have been distinguished: {counter} of {max_group}')
+        if counter == max_group:
+            break
+
+        # Update temp_sets, remove index set that contains selected SNP
+        temp_sets = tuple(s for s in temp_sets if snp_id_to_index[selected_snp] not in s)
 
     if args.minimal == 2:
         sample_pairs.extend(sample_pairs_add)
@@ -927,6 +954,9 @@ if __name__ == '__main__':
 # 4. Generate some graphs such as IBS/MAF/missing distribution, visualization of selecting, SNP on chromosome etc.
 # 5. use multiprocessing on 'core selection'.
 # 6. A GUI version for Windows users.
+# 7. set a float range missing argument.
+# 8. fill by major, check if there exists missing genotype before filling.
+# 9. replace missing, check if sample pairs is empty because of non-missing vcf.
 
 #
 #
