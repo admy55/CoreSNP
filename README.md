@@ -42,6 +42,7 @@ CoreSNP is designed to use the compressed or uncompressed Variant Call Format (V
 <br>
 
 ## Publication
+Dou, T., Wang, C., Ma, Y. et al. CoreSNP: an efficient pipeline for core marker profile selection from genome-wide SNP datasets in crops. BMC Plant Biol 23, 580 (2023). https://doi.org/10.1186/s12870-023-04609-w
 
 
 ## License
